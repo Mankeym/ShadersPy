@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style/style.css' %} ">
+    <title>Shaders</title>
+</head>
+<body class="content">
+<h1 style="color: white;"> Shaders</h1>
+  <input id="input" />
+  <div style="display:flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 20px;" data-array='{{ data }}' id="array">
+
+  </div>
+
+  <template id="template">
+      <div class="card" style="background: 100% 100%, no-repeat, linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));">
+          <h3></h3>
+          <p style="height: 200px; overflow: auto;"></p>
+      </div>
+  </template>
+  <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+          function createCard(){
+      const data = document.getElementById('array')
+              console.log(JSON.parse(data.dataset['array']))
+      JSON.parse(data.dataset['array']).forEach((item) => {
+        const template = document.getElementById('template').content.cloneNode(true)
+        template.querySelector('h3').textContent = item.fields.title
+        template.querySelector('p').textContent = item.fields.textRus
+        data.append(template)
+      })
+    }
+    function inputHandler(){
+      const input = document.getElementById('input')
+      const container = document.getElementById('array')
+      input.addEventListener('input', (e) => {
+        e.preventDefault();
+        container.innerHTML = ''
+        JSON.parse(container.dataset['array']).forEach((item) => {
+          if(item.fields.title.toUpperCase().includes(e.target.value.toUpperCase()) || item.fields.textRus.toUpperCase().includes(e.target.value.toUpperCase())){
+            const template = document.getElementById('template').content.cloneNode(true)
+            template.querySelector('h3').textContent = item.fields.title
+            template.querySelector('p').textContent = item.fields.textRus
+            container.append(template)
+          }
+        })
+      })
+    }
+    inputHandler()
+    createCard()
+      })
+
+  </script>
+</body>
+</html>
